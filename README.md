@@ -5,7 +5,7 @@
 
 A react, typescript static site example - for github.io.
 
-Demo: [http://wwlib.github.io/react-typescript-static-site-example/](http://wwlib.github.io/react-typescript-static-site-example/)  
+Demo: [http://wwlib.org/react-static-example/](http://wwlib.org/react-static-example/)  
 
 Note: This is a work in-progress...
 
