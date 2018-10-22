@@ -1,0 +1,84 @@
+/*
+blockquote {
+  font-style: italic;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 11pt;
+}
+*/
+
+canvas {
+    border-radius: 6px;
+    margin: 3px;
+    background-color: #232628;
+}
+
+.page {
+    min-height: 500px;
+    /* background-color: white; */
+    padding: 6px;
+    /* color: black; */
+    border-radius: 4px;
+}
+
+
+
+/***************************
+Top Navigation Bar
+****************************/
+
+.topNav {
+	margin: 0;
+	padding: 0;
+    overflow: hidden;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--top-bar-height);
+    margin-bottom: 6px;
+    margin-top: 6px;
+    border-radius: 4px;
+}
+
+.topTitle {
+    width: 100%;
+    background-color: #04478d;
+    color: white;
+    display: flex;
+    /*justify-content: space-between;*/
+    padding: 6px;
+}
+
+.topLogo {
+    margin-right: 6px;
+}
+
+.topButtons {
+	width: calc(100% - var(--side-bar-width));
+	background-color: #CFCFCF;
+	display: flex;
+	justify-content: space-between;
+}
+
+.bottomNav {
+	padding: 6px;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    border-radius: 4px;
+    font-size: 9pt;
+}
+
+.leftNav {
+	margin: 0;
+	padding: 0;
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 6px;
+    margin-top: 6px;
+    border-radius: 4px;
+}
