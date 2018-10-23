@@ -73,7 +73,7 @@ export default class Model extends EventEmitter {
     // Download
 
     downloadJSON(): void {
-        let text: string = JSON.stringify({hello: 'wolrd'}, null, 2);
+        let text: string = JSON.stringify({hello: 'world'}, null, 2);
         this.downloadFile('application/json', text, 'app.json');
     }
 

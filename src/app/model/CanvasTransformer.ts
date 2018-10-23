@@ -15,10 +15,14 @@ export default class CanvasTransformer {
     private _lastMousedown: Coords;
     private _lastMousemove: Coords;
     private _testImage: HTMLImageElement;
+    private _iOSDevice = !!navigator.platform.match(/iPhone|iPod|iPad/);
 
     public mousedownHandler: any = this.handleMousedown.bind(this);
     public mouseupHandler: any = this.handleMouseup.bind(this);
     public mousemoveHandler: any = this.handleMousemove.bind(this);
+    public touchstartHandler: any = this.handleTouchstart.bind(this);
+    public touchendHandler: any = this.handleTouchend.bind(this);
+    public touchmoveHandler: any = this.handleTouchmove.bind(this);
     public scrollHandler: any = this.handleScroll.bind(this);
 
     //DEBUG
@@ -160,10 +164,20 @@ export default class CanvasTransformer {
 
     handleMousedown(evt: any) {
         document.body.style.webkitUserSelect = document.body.style.userSelect = 'none';
+        this.canvas.addEventListener('mousemove', this.mousemoveHandler, false);
         this.lastX = evt.offsetX || (evt.pageX - this.canvas.offsetLeft);
         this.lastY = evt.offsetY || (evt.pageY - this.canvas.offsetTop);
         this.dragStart = this.transformedPoint(this.lastX, this.lastY);
         this.dragged = false;
+    }
+
+    handleTouchstart(event: any): void {
+        event.preventDefault();
+        this.canvas.addEventListener('touchmove', this.touchmoveHandler, {passive: false});
+        if (event.targetTouches.length == 1) {
+            let touch = event.targetTouches[0];
+            this.handleMousedown(touch);
+        }
     }
 
     handleMousemove(evt: any) {
@@ -178,14 +192,33 @@ export default class CanvasTransformer {
         }
     }
 
-    handleMouseup(evt: any) {
+    handleTouchmove(event: any): void {
+    event.preventDefault();
+    if (event.targetTouches.length == 1) {
+      var touch = event.targetTouches[0];
+      this.handleMousemove(touch);
+    }
+}
+
+    handleMouseup(event: any) {
+        this.canvas.removeEventListener("mousemove", this.mousemoveHandler, false);
         this.dragStart = null;
     }
 
-    setupEvents(): void {
-        this.canvas.addEventListener('mousedown', this.mousedownHandler, false);
-        this.canvas.addEventListener('mousemove', this.mousemoveHandler, false);
-        this.canvas.addEventListener('mouseup', this.mouseupHandler, false);
+    handleTouchend(event: any): void {
+        this.canvas.removeEventListener('touchmove', this.touchmoveHandler, false);
+        this.handleMouseup(event);
+        event.preventDefault();
+    }
+
+    setupTouchHandlers(): void {
+        if (this._iOSDevice) {
+            this.canvas.addEventListener('touchstart', this.touchstartHandler, {passive: false});
+            this.canvas.addEventListener('touchend', this.touchendHandler, {passive: false});
+        } else {
+            this.canvas.addEventListener("mousedown", this.mousedownHandler, false);
+            this.canvas.addEventListener("mouseup", this.mouseupHandler, false);
+        }
         this.canvas.addEventListener('DOMMouseScroll',this.scrollHandler,false);
         this.canvas.addEventListener('mousewheel',this.scrollHandler,false);
     }
@@ -194,6 +227,9 @@ export default class CanvasTransformer {
         this.canvas.removeEventListener('mousedown', this.mousedownHandler, false);
         this.canvas.removeEventListener('mousemove', this.mousemoveHandler, false);
         this.canvas.removeEventListener('mouseup', this.mouseupHandler, false);
+        this.canvas.removeEventListener('touchstart', this.touchstartHandler, false);
+        this.canvas.removeEventListener('touchmove', this.touchmoveHandler, false);
+        this.canvas.removeEventListener('touchend', this.touchendHandler, false);
         this.canvas.removeEventListener('DOMMouseScroll',this.scrollHandler,false);
         this.canvas.removeEventListener('mousewheel',this.scrollHandler,false);
 

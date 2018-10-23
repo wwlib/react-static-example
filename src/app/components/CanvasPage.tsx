@@ -86,7 +86,7 @@ export default class CanvasPage extends React.Component<CanvasPageProps, CanvasP
             this._canvasTxr.dispose();
         }
         this._canvasTxr = new CanvasTransformer(this._mainCanvas);
-        this._canvasTxr.setupEvents();
+        this._canvasTxr.setupTouchHandlers();
         // No image if invalid path
         this._canvasImage.onerror = () => {
             this._canvasImage = null;
