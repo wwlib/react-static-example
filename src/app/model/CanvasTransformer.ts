@@ -212,10 +212,10 @@ export default class CanvasTransformer {
         } else if (event.targetTouches.length == 2) {
             let touch = event.targetTouches[0];
             let pt: Coords = this.getMousePosition(touch);
-            let diffX: number = pt.x = this.lastX;
+            let diffY: number = pt.y - this.lastY;
             this.lastX = pt.x;
             this.lastY = pt.y;
-            let evt = {pageX: pt.x, pageY: pt.y, wheelDelta: diffX, preventDefault: function(){}};
+            let evt = {pageX: pt.x, pageY: pt.y, wheelDelta: diffY, preventDefault: function(){}};
             this.handleScroll(evt);
         }
     }
