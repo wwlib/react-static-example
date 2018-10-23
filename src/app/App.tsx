@@ -18,7 +18,7 @@ switch (window.location.hostname) {
         process.env.PUBLIC_URL = '';
         break;
     case 'wwlib.org':
-        process.env.PUBLIC_URL = `/${homepage}/`;
+        process.env.PUBLIC_URL = homepage;
         break;
 }
 console.log(`process.env.PUBLIC_URL: `, process.env.PUBLIC_URL);
