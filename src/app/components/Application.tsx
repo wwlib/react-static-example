@@ -8,12 +8,14 @@ import LeftNav from './LeftNav';
 import Model, { Mode } from '../model/Model';
 import Page from './Page';
 import CanvasPage from './CanvasPage';
+import StatusWindow from './StatusWindow';
 
 export interface ApplicationProps { model: Model }
 export interface ApplicationState {
     log: string,
     activePage: number,
     toolbarMode: Mode,
+    showStatusWindow: boolean
 }
 
 export default class Application extends React.Component<ApplicationProps, ApplicationState> {
@@ -26,11 +28,13 @@ export default class Application extends React.Component<ApplicationProps, Appli
             log: '',
             activePage: 1,
             toolbarMode: this.props.model.mode,
+            showStatusWindow: false
         });
     }
 
     componentDidMount() {
         this.props.model.addListener('modeChange', this._modeChangeHandler);
+        this.props.model.addPanelWithId('statusWindow');
     }
 
     onModeChange() {
@@ -86,16 +90,42 @@ export default class Application extends React.Component<ApplicationProps, Appli
         });
     }
 
-    onDownloadClick(value: string): void {
-        console.log(`onDownloadClick: ${value}`);
+    onXtraClick(value: string): void {
+        console.log(`onXtraClick: ${value}`);
         switch (value) {
             case 'downloadJSON':
                 this.props.model.downloadJSON();
                 break;
+            case 'statusWindow':
+                this.setState({showStatusWindow: this.props.model.togglePanelOpenedWithId('statusWindow')});
+                this.props.model.bringPanelToFront('statusWindow');
+                break;
         }
     }
 
+    onStatusWindowClick(type: string, id: string): void {
+        switch(type) {
+            case 'bringToFront':
+                this.props.model.bringPanelToFront(id);
+                break;
+            case 'close':
+                this.props.model.closePanelWithId(id);
+                switch(id) {
+                    case 'statusWindow':
+                        this.setState({showStatusWindow: false});
+                        break;
+                }
+                break;
+        }
+    }
+
+    onWindowMounted(id: string): void {
+        this.props.model.addPanelWithId(id);
+    }
+
     render() {
+        let statusWindow = this.state.showStatusWindow ? <StatusWindow id={'statusWindow'} messages={this.props.model.statusMessages} onClick={this.onStatusWindowClick.bind(this)} onMounted={this.onWindowMounted.bind(this)}/> : null;
+
         return (
             <ReactBootstrap.Grid>
                 <ReactBootstrap.Row>
@@ -111,7 +141,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
                         <Switch>
                             <Route exact path={`/`} render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
                             <Route path={`/page`}render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
-                            <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick.bind(this)} onDownloadClick={this.onDownloadClick.bind(this)} mode={this.state.toolbarMode} model={this.props.model}/>} />
+                            <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick.bind(this)} onXtraClick={this.onXtraClick.bind(this)} mode={this.state.toolbarMode} model={this.props.model}/>} />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
                         </Switch>
                     </ReactBootstrap.Col>
@@ -121,6 +151,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
                         <BottomNav clickHandler={this.onBottomNavClick.bind(this)} />
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
+                {statusWindow}
             </ReactBootstrap.Grid>
         );
     }

@@ -82,3 +82,22 @@ Top Navigation Bar
     margin-top: 6px;
     border-radius: 4px;
 }
+
+/* floating window panels */
+
+.app-window {
+    z-index: 200;
+    position: absolute;
+    /* right: 10px; */
+    width: 400px;
+    top: 60px;
+    padding: 6px;
+    background-color: #f7f7f7;
+}
+
+#statusWindow {
+  position: absolute;
+  background-color: lightblue;
+  top: 60px;
+  left: 10px;
+}

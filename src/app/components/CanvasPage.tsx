@@ -5,7 +5,7 @@ import CanvasContainer from './CanvasContainer';
 import Model, { Mode } from '../model/Model';
 import CanvasTransformer from '../model/CanvasTransformer';
 
-export interface CanvasPageProps { onToolClick: any, onDownloadClick: any, mode: Mode, model: Model }
+export interface CanvasPageProps { onToolClick: any, onXtraClick: any, mode: Mode, model: Model }
 export interface CanvasPageState { srcImageURL: string }
 
 export default class CanvasPage extends React.Component<CanvasPageProps, CanvasPageState> {
@@ -22,7 +22,6 @@ export default class CanvasPage extends React.Component<CanvasPageProps, CanvasP
         this.toolbarHandler = this.toolbarHandler.bind(this);
         this.onSubmitClick = this.onSubmitClick.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.onDownloadClick = this.onDownloadClick.bind(this);
     }
 
     componentDidMount() {
@@ -68,13 +67,6 @@ export default class CanvasPage extends React.Component<CanvasPageProps, CanvasP
                 console.log('button', value);
                 break;
         }
-    }
-
-    onDownloadClick(event: any): void {
-        let nativeEvent: any = event.nativeEvent;
-        let target = nativeEvent.target;
-        let value = target.id;
-        this.props.onDownloadClick(value);
     }
 
     onSubmitClick(): void {
@@ -131,8 +123,9 @@ export default class CanvasPage extends React.Component<CanvasPageProps, CanvasP
                     <ReactBootstrap.Button id="addImgSrc" onClick={this.onSubmitClick}>Set Canvas Background</ReactBootstrap.Button>
                     <ReactBootstrap.FormControl type="text" id="imageSrc" name="imageSrc" value={this.state.srcImageURL} onChange={this.handleInputChange} style={{width: "300px", display: "inline-block"}}/>
                 </ReactBootstrap.FormGroup>
-                <ReactBootstrap.ButtonGroup onClick={this.onDownloadClick}>
-                    <ReactBootstrap.Button id="downloadJSON">Download JSON</ReactBootstrap.Button>
+                <ReactBootstrap.ButtonGroup>
+                    <ReactBootstrap.Button id="downloadJSON" onClick={()=>this.props.onXtraClick('downloadJSON')}>Download JSON</ReactBootstrap.Button>
+                    <ReactBootstrap.Button id="downloadJSON" onClick={()=>this.props.onXtraClick('statusWindow')}>Status Window</ReactBootstrap.Button>
                 </ReactBootstrap.ButtonGroup>
             </div>
         );

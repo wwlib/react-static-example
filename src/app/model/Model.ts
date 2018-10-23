@@ -1,5 +1,6 @@
 import { EventEmitter } from "events";
 import { appVersion } from './AppVersion';
+import WindowController from './WindowController';
 
 export enum Mode {
     Panning = 1,
@@ -14,7 +15,6 @@ export default class Model extends EventEmitter {
     static SHIFT_KEY_DOWN: boolean;
 
     public statusMessages: string;
-    public panelZIndexMap: Map<string, number>;
     public mode: Mode;
 
     public mainCanvas: HTMLCanvasElement;
@@ -33,8 +33,7 @@ export default class Model extends EventEmitter {
 
     constructor() {
         super();
-        this.panelZIndexMap = new Map<string, number>();
-        this.statusMessages = '';
+        this.statusMessages = 'Model: ready.';
         this.mode = Mode.Selecting;
         this.emit('ready', this);
     }
@@ -193,6 +192,43 @@ export default class Model extends EventEmitter {
         this.mainCanvas.addEventListener('DOMMouseScroll',this._scrollHandler,false);
         this.mainCanvas.addEventListener('mousewheel',this._scrollHandler,false);
         this._previousClickTime = new Date().getTime();
+    }
+
+    // Window Management
+
+    // getPanelOpenedWithId(panelId: string): boolean {
+    //     let result: boolean = false;
+    //     let window: WindowController | undefined = WindowController.getWindowControllerWithId(panelId);
+    //     if (window) {
+    //         result = window.opened;
+    //     }
+    //     return result;
+    // }
+
+    togglePanelOpenedWithId(panelId: string): boolean {
+        let window: WindowController | undefined = WindowController.getWindowControllerWithId(panelId);
+        if (!window) {
+            return true; // open the panel if it is not yet instantiated
+        } else {
+            return window.toggleOpened();
+        }
+    }
+
+    // openPanelWithId(panelId: string): void {
+    //     WindowController.openWithId(panelId);
+    // }
+
+    closePanelWithId(panelId: string): void {
+        WindowController.closeWithId(panelId);
+    }
+
+    bringPanelToFront(panelId: string): void {
+        WindowController.addWindowWithId(panelId);
+        WindowController.bringWindowToFrontWithId(panelId);
+    }
+
+    addPanelWithId(panelId: string, x: number = 0, y: number = 0, z: number = 0): void {
+        WindowController.addWindowWithId(panelId, x, y, z);
     }
 
     dispose(): void {
