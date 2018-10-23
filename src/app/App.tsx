@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 import Application from './components/Application';
 import Model from './model/Model';
@@ -25,9 +25,9 @@ console.log(`process.env.PUBLIC_URL: `, process.env.PUBLIC_URL);
 
 // model.on('ready', () => {
     ReactDOM.render(
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter basename={process.env.PUBLIC_URL}>
             <Application model={model} />
-        </BrowserRouter>,
+        </HashRouter>,
         document.getElementById('root')
     );
 // });
