@@ -23,9 +23,10 @@ switch (window.location.hostname) {
 }
 console.log(`process.env.PUBLIC_URL: `, process.env.PUBLIC_URL);
 
+// basename={process.env.PUBLIC_URL}
 // model.on('ready', () => {
     ReactDOM.render(
-        <HashRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter>
             <Application model={model} />
         </HashRouter>,
         document.getElementById('root')

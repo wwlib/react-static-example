@@ -109,9 +109,9 @@ export default class Application extends React.Component<ApplicationProps, Appli
                     </ReactBootstrap.Col>
                     <ReactBootstrap.Col xs={10} md={10}>
                         <Switch>
-                            <Route exact path="/" render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
-                            <Route path="/page" render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
-                            <Route path="/canvas" render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick.bind(this)} onDownloadClick={this.onDownloadClick.bind(this)} mode={this.state.toolbarMode} model={this.props.model}/>} />
+                            <Route exact path={`${process.env.PUBLIC_URL}/`} render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
+                            <Route path={`${process.env.PUBLIC_URL}/page`}render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
+                            <Route path={`${process.env.PUBLIC_URL}/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick.bind(this)} onDownloadClick={this.onDownloadClick.bind(this)} mode={this.state.toolbarMode} model={this.props.model}/>} />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
                         </Switch>
                     </ReactBootstrap.Col>

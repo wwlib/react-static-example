@@ -17,9 +17,9 @@ export default class LeftNav extends React.Component<LeftNavProps, LeftNavState>
     render() {
         return (
             <div>
-              <Link to="/">Home</Link><br/>
-              <Link to="/page">Page</Link><br/>
-              <Link to="/canvas">Canvas</Link><br/>
+              <Link to={`${process.env.PUBLIC_URL}/`}>Home</Link><br/>
+              <Link to={`${process.env.PUBLIC_URL}/page`}>Page</Link><br/>
+              <Link to={`${process.env.PUBLIC_URL}/canvas`}>Canvas</Link><br/>
           </div>
         );
     }
