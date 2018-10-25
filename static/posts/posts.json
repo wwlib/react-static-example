@@ -1,0 +1,18 @@
+[
+    {
+        "category": "",
+        "posts": [
+            {"title": "First Post", "url": "post1"},
+            {"title": "Second Post", "url": "post2"},
+            {"title": "Third Post", "url": "post3"}
+        ]
+    },
+    {
+        "category": "development",
+        "posts": [
+            {"title": "First Development Post", "url": "dev-post1"},
+            {"title": "Second Development Post", "url": "dev-post2"},
+            {"title": "Third Development Post", "url": "dev-post3"}
+        ]
+    }
+]

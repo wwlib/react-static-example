@@ -9,6 +9,8 @@ import Model, { Mode } from '../model/Model';
 import Page from './Page';
 import CanvasPage from './CanvasPage';
 import StatusWindow from './StatusWindow';
+import Markdown from './Markdown';
+import Blog from './Blog';
 
 export interface ApplicationProps { model: Model }
 export interface ApplicationState {
@@ -35,6 +37,15 @@ export default class Application extends React.Component<ApplicationProps, Appli
     componentDidMount() {
         this.props.model.addListener('modeChange', this._modeChangeHandler);
         this.props.model.addPanelWithId('statusWindow');
+        this.onStatusWindowClick = this.onStatusWindowClick.bind(this);
+        this.onWindowMounted = this.onWindowMounted.bind(this);
+        this.onTopNavClick = this.onTopNavClick.bind(this);
+        this.onPostClick = this.onPostClick.bind(this);
+        this.onBlogClick = this.onBlogClick.bind(this);
+        this.onToolClick = this.onToolClick.bind(this);
+        this.onXtraClick = this.onXtraClick.bind(this)
+        this.onStatusWindowClick = this.onStatusWindowClick.bind(this);
+        this.onBottomNavClick = this.onBottomNavClick.bind(this);
     }
 
     onModeChange() {
@@ -123,32 +134,43 @@ export default class Application extends React.Component<ApplicationProps, Appli
         this.props.model.addPanelWithId(id);
     }
 
+    onPostClick(type: string, value: string): void {
+
+    }
+
+    onBlogClick(type: string, value: string): void {
+
+    }
+
     render() {
-        let statusWindow = this.state.showStatusWindow ? <StatusWindow id={'statusWindow'} messages={this.props.model.statusMessages} onClick={this.onStatusWindowClick.bind(this)} onMounted={this.onWindowMounted.bind(this)}/> : null;
+        let statusWindow = this.state.showStatusWindow ? <StatusWindow id={'statusWindow'} messages={this.props.model.statusMessages} onClick={this.onStatusWindowClick} onMounted={this.onWindowMounted}/> : null;
 
         return (
             <ReactBootstrap.Grid>
                 <ReactBootstrap.Row>
                     <ReactBootstrap.Col>
-                        <TopNav clickHandler={this.onTopNavClick.bind(this)} />
+                        <TopNav clickHandler={this.onTopNavClick} />
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
                 <ReactBootstrap.Row>
                     <ReactBootstrap.Col xs={2} md={2}>
-                        <LeftNav clickHandler={this.onLeftNavClick.bind(this)} activePage={this.state.activePage}/>
+                        <LeftNav clickHandler={this.onLeftNavClick} activePage={this.state.activePage}/>
                     </ReactBootstrap.Col>
                     <ReactBootstrap.Col xs={10} md={10}>
                         <Switch>
                             <Route exact path={`/`} render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
                             <Route path={`/page`}render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
-                            <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick.bind(this)} onXtraClick={this.onXtraClick.bind(this)} mode={this.state.toolbarMode} model={this.props.model}/>} />
+                            <Route path={`/post/:category/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.category}/${props.match.params.url}.md`} clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/post/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.url}.md`} clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/blog`}render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
+                            <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
                         </Switch>
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
                 <ReactBootstrap.Row>
                     <ReactBootstrap.Col>
-                        <BottomNav clickHandler={this.onBottomNavClick.bind(this)} />
+                        <BottomNav clickHandler={this.onBottomNavClick} />
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
                 {statusWindow}
