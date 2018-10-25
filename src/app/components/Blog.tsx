@@ -44,6 +44,9 @@ export default class Blog extends React.Component<BlogProps, BlogState> {
                 let heading: string = categoryName ? `${categoryName} posts` : `posts`;
                 posts.push(<h4>{heading}</h4>);
                 let urlPrefix: string = categoryName ? `/#/post/${categoryName}/` : `/#/post/`;
+                if (process.env.PUBLIC_URL) {
+                    urlPrefix = `${process.env.PUBLIC_URL}${urlPrefix}`
+                }
                 category.posts.forEach(post => {
                     posts.push(<p className='post'><a href={`${urlPrefix}${post.url}`}>{post.title}</a></p>);
                 });
