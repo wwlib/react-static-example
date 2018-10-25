@@ -48,7 +48,7 @@ export default class Blog extends React.Component<BlogProps, BlogState> {
                     urlPrefix = `${process.env.PUBLIC_URL}${urlPrefix}`
                 }
                 category.posts.forEach(post => {
-                    posts.push(<p className='post'><a href={`${urlPrefix}${post.url}`}>{post.title}</a></p>);
+                    posts.push(<p className='post'><a href={`${urlPrefix}${post.url}.md`}>{post.title}</a></p>);
                 });
             })
         }

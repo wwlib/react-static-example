@@ -45,8 +45,16 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
         let markdownDiv: any = <div dangerouslySetInnerHTML={{__html: this.state.html}} />
         console.log(this.state.html);
         console.log(markdownDiv);
+        let base: any = undefined;
+        // process.env.PUBLIC_URL = "/react-typescript-static-site-example";
+        if (process.env.PUBLIC_URL) {
+            let baseUrl: string = `https://${window.location.host}${process.env.PUBLIC_URL}`;
+            base = <base href={baseUrl} />
+        }
+
         return (
             <div>
+                {base}
                 <Link to={`/blog`}>Back</Link><br/>
                 {markdownDiv}
             </div>
