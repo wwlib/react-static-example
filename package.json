@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "",
   "main": "webpack.config.js",
-  "homepage": "/react-typescript-static-site-example/",
+  "homepage": "/react-typescript-static-site-example",
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
     "build": "./node_modules/.bin/webpack",

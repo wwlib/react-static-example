@@ -13,14 +13,12 @@ import './css/app.css';
 
 let model: Model = new Model();
 console.log(`window.location.hostname: `, window.location.hostname, window.location.host, homepage);
-switch (window.location.hostname) {
-    case 'localhost':
-        process.env.PUBLIC_URL = '';
-        break;
-    case 'wwlib.org':
-        process.env.PUBLIC_URL = homepage;
-        break;
+if (window.location.hostname == 'localhost') {
+    process.env.PUBLIC_URL = '';
+} else {
+    process.env.PUBLIC_URL = homepage;
 }
+
 console.log(`process.env.PUBLIC_URL: `, process.env.PUBLIC_URL);
 
 // basename={process.env.PUBLIC_URL}
