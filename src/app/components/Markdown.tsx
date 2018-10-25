@@ -18,6 +18,10 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
             this.loadMarkdown(this.props.markdownUrl)
                 .then(markdown => {
                     console.log(`Markdown: markdown: `, markdown);
+                    if (process.env.PUBLIC_URL) {
+                        let prefix: string = `../${process.env.PUBLIC_URL}/`;
+                        markdown = markdown.replace(/\.\.\//g, prefix);
+                    }
                     let converter = new Converter();
                     let html = converter.makeHtml(markdown);
                     this.setState({html: html});
