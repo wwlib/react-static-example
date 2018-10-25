@@ -5,8 +5,9 @@
 ![bootstrap](./assets/bootstrap.png =100x100)
 
 #### For today...
-- topic 1 (penguins)
-- topic 2
+- topic 1 (react)
+- topic 2 (typescript)
+- topic 3 (bootstrap)
 
 
 ```

@@ -12,7 +12,7 @@ declare let module: any
 import './css/app.css';
 
 let model: Model = new Model();
-console.log(`window.location.hostname: `, window.location.hostname, window.location.host, homepage);
+console.log(`window.location.hostname: `, window.location, window.location.hostname, window.location.host, homepage);
 if (window.location.hostname == 'localhost') {
     process.env.PUBLIC_URL = '';
 } else {

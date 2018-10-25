@@ -43,7 +43,7 @@ export default class Blog extends React.Component<BlogProps, BlogState> {
                 let categoryName: string = category.category;
                 let heading: string = categoryName ? `${categoryName} posts` : `posts`;
                 posts.push(<h4>{heading}</h4>);
-                let urlPrefix: string = categoryName ? `/#/post/${categoryName}/` : `/#/post/`;
+                let urlPrefix: string = categoryName ? `/#/posts/${categoryName}/` : `/#/posts/`;
                 if (process.env.PUBLIC_URL) {
                     urlPrefix = `${process.env.PUBLIC_URL}${urlPrefix}`
                 }

@@ -160,8 +160,8 @@ export default class Application extends React.Component<ApplicationProps, Appli
                         <Switch>
                             <Route exact path={`/`} render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
                             <Route path={`/page`}render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
-                            <Route path={`/post/:category/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.category}/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
-                            <Route path={`/post/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/posts/:category/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.category}/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/posts/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
                             <Route path={`/blog`}render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
                             <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />

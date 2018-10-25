@@ -1,7 +1,6 @@
 ### My First Development post
 
-![penguin](../assets/penguin.png =500x375)
+![showdown](./assets/showdown.png =100x100)
 
 #### For today...
-- topic 1 (penguins)
-- topic 2
+- topic 1 (showdown)

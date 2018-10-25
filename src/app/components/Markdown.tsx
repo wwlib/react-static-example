@@ -17,11 +17,26 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
         if (!this.props.markdown) {
             this.loadMarkdown(this.props.markdownUrl)
                 .then(markdown => {
-                    console.log(`Markdown: markdown: `, markdown);
+                    console.log(`Markdown: window.location: `, window.location);
+                    let hash: string = window.location.hash;
+                    let urlParts: string[] = hash.split('/');
+                    urlParts.shift(); // remove first # element
+                    urlParts.pop(); // remove last filename element
+                    let pathPrefix: string = urlParts.join('/') + '/';
                     if (process.env.PUBLIC_URL) {
-                        let prefix: string = `../${process.env.PUBLIC_URL}/`;
-                        markdown = markdown.replace(/\.\.\//g, prefix);
+                        let pathPrefix: string = `../${process.env.PUBLIC_URL}/`;
                     }
+                    console.log(`pathPrefix: ${pathPrefix}`);
+                    markdown = markdown.replace(/\.\//g, pathPrefix);
+
+                        // http://localhost:3000/#/posts/post1.md
+                        // http://localhost:3000/assets/react.png
+                        // http://localhost:3000/posts/assets/react.png
+
+                        // http://localhost:3000/#/posts/development/dev-post1.md
+                        // http://localhost:3000/assets/showdown.png
+                        // http://localhost:3000/posts/development/assets/showdown.png
+                        
                     let converter = new Converter();
                     let html = converter.makeHtml(markdown);
                     this.setState({html: html});
@@ -41,20 +56,9 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
     }
 
     render() {
-        // let markdownDiv: any = <div className="markDown">Markdown</div>;
         let markdownDiv: any = <div dangerouslySetInnerHTML={{__html: this.state.html}} />
-        console.log(this.state.html);
-        console.log(markdownDiv);
-        let base: any = undefined;
-        // process.env.PUBLIC_URL = "/react-typescript-static-site-example";
-        if (process.env.PUBLIC_URL) {
-            let baseUrl: string = `https://${window.location.host}${process.env.PUBLIC_URL}`;
-            base = <base href={baseUrl} />
-        }
-
         return (
             <div>
-                {base}
                 <Link to={`/blog`}>Back</Link><br/>
                 {markdownDiv}
             </div>
