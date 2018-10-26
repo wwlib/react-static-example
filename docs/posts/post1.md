@@ -21,24 +21,22 @@ See related post: [dev-post2.md](./development/dev-post2.md)
 #### Code
 
 ```js
-const path = require('path'),
-    express = require('express'),
-    webpack = require('webpack'),
-    webpackConfig = require('./webpack.config.js'),
-    app = express(),
-    port = process.env.PORT || 3000;
+var str = 'For more information, see Chapter 3.4.5.1';
+var re = /see (chapter \d+(\.\d)*)/i;
+var found = str.match(re);
 
-app.listen(port, () => { console.log(`App is listening on port ${port}`) });
+console.log(found);
 
-app.get('/:page', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'docs', 'index.html'))
-});
+// logs [ 'see Chapter 3.4.5.1',
+//        'Chapter 3.4.5.1',
+//        '.1',
+//        index: 22,
+//        input: 'For more information, see Chapter 3.4.5.1' ]
 
-let compiler = webpack(webpackConfig);
-app.use(require('webpack-dev-middleware')(compiler, {
-    noInfo: true, publicPath: webpackConfig.output.publicPath, stats: { colors: true }
-}));
-app.use(require('webpack-hot-middleware')(compiler));
-app.use(express.static(path.resolve(__dirname, 'docs')));
+// 'see Chapter 3.4.5.1' is the whole match.
+// 'Chapter 3.4.5.1' was captured by '(chapter \d+(\.\d)*)'.
+// '.1' was the last value captured by '(\.\d)'.
+// The 'index' property (22) is the zero-based index of the whole match.
+// The 'input' property is the original string that was parsed.
 
 ```

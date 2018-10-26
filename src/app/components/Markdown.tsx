@@ -8,16 +8,35 @@ console.log(hljs);
 const showdown = require('showdown');
 const path = require('path');
 
-export interface MarkDownProps { markdown: string, markdownUrl: string, clickHandler: any }
+export interface MarkDownProps { history: any, location: any, markdown: string, markdownUrl: string, clickHandler: any }
 export interface MarkDownState { html: string }
 
 export default class MarkDown extends React.Component<MarkDownProps, MarkDownState> {
+
+    private _windowOnHashChangeHandlerRestore: any;
 
     componentWillMount() {
         this.setState({html: ''});
     }
 
     componentDidMount() {
+        this._windowOnHashChangeHandlerRestore = window.onhashchange;
+        window.onhashchange = () => {
+            console.log(`Markdown: has changed`);
+            location.reload();
+            // console.log(this.props);
+            // console.log(window.location, window.location.hash);
+            // let newLocationHash: string = window.location.hash;
+            // console.log(newLocationHash);
+            // if (newLocationHash) {
+            //     let pathStart: number = newLocationHash.indexOf('/');
+            //     let newPath: string = newLocationHash.substring(pathStart);
+            //     console.log(`newPath: `, newPath);
+            //     this.props.history.go(newPath);
+            //
+            // }
+        }
+
         showdown.extension('highlight', function () {
         	return [{
           	type: "output",
@@ -67,14 +86,6 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
                         }
                     }
 
-                        // http://localhost:3000/#/posts/post1.md
-                        // http://localhost:3000/assets/react.png
-                        // http://localhost:3000/posts/assets/react.png
-
-                        // http://localhost:3000/#/posts/development/dev-post1.md
-                        // http://localhost:3000/assets/showdown.png
-                        // http://localhost:3000/posts/development/assets/showdown.png
-
                     let converter = new showdown.Converter({extensions: ['highlight']});
                     let html = converter.makeHtml(markdown);
                     this.setState({html: html});
@@ -88,26 +99,20 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
 
     }
 
+    componentWillUnmount() {
+        window.onhashchange = this._windowOnHashChangeHandlerRestore;
+    }
+
     async loadMarkdown(url: string): Promise<any> {
         const { data: markdown } = await axios.get(url);
         return markdown;
     }
 
-    onClick() {
-        location.reload();
-    }
-
-    back(event) {
-        event.preventDefault();
-        event.stopPropagation();
-        window.history.back();
-    }
-
     render() {
         let markdownDiv: any = <div className="post" dangerouslySetInnerHTML={{__html: this.state.html}} />
         return (
-            <div onClick={this.onClick}>
-                <Link onClick={this.back} to={`/blog`}>Blog</Link><br/>
+            <div>
+                <Link to={`/blog`}>Blog</Link><br/>
                 {markdownDiv}
             </div>
         );
