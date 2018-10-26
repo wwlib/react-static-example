@@ -11,11 +11,11 @@ import CanvasPage from './CanvasPage';
 import StatusWindow from './StatusWindow';
 import Markdown from './Markdown';
 import Blog from './Blog';
+import Chart from './Chart';
 
 export interface ApplicationProps { model: Model }
 export interface ApplicationState {
     log: string,
-    activePage: number,
     toolbarMode: Mode,
     showStatusWindow: boolean
 }
@@ -28,7 +28,6 @@ export default class Application extends React.Component<ApplicationProps, Appli
         console.log(`Application: componentWillMount: `);
         this.setState({
             log: '',
-            activePage: 1,
             toolbarMode: this.props.model.mode,
             showStatusWindow: false
         });
@@ -44,6 +43,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
         this.onBlogClick = this.onBlogClick.bind(this);
         this.onToolClick = this.onToolClick.bind(this);
         this.onXtraClick = this.onXtraClick.bind(this)
+        this.onChartClick = this.onChartClick.bind(this);
         this.onStatusWindowClick = this.onStatusWindowClick.bind(this);
         this.onBottomNavClick = this.onBottomNavClick.bind(this);
     }
@@ -75,11 +75,8 @@ export default class Application extends React.Component<ApplicationProps, Appli
         }
     }
 
-    onLeftNavClick(selectedKey): void {
-        console.log(`onLeftNavClick: `, selectedKey);
-        this.setState({
-            activePage: selectedKey
-        });
+    onLeftNavClick(event: any): void {
+        console.log(`onLeftNavClick: `, event);
     }
 
     onToolClick(value): void {
@@ -142,6 +139,10 @@ export default class Application extends React.Component<ApplicationProps, Appli
 
     }
 
+    onChartClick(type: string, value: string): void {
+
+    }
+
     render() {
         let statusWindow = this.state.showStatusWindow ? <StatusWindow id={'statusWindow'} messages={this.props.model.statusMessages} onClick={this.onStatusWindowClick} onMounted={this.onWindowMounted}/> : null;
 
@@ -154,7 +155,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
                 </ReactBootstrap.Row>
                 <ReactBootstrap.Row>
                     <ReactBootstrap.Col xs={2} md={2}>
-                        <LeftNav clickHandler={this.onLeftNavClick} activePage={this.state.activePage}/>
+                        <LeftNav clickHandler={this.onLeftNavClick} />
                     </ReactBootstrap.Col>
                     <ReactBootstrap.Col xs={10} md={10}>
                         <Switch>
@@ -164,6 +165,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
                             <Route path={`/posts/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
                             <Route path={`/blog`}render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
                             <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
+                            <Route path={`/chart`} render={(props) => <Chart {...props}  onChartClick={this.onChartClick} />} />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
                         </Switch>
                     </ReactBootstrap.Col>
