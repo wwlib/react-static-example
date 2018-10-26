@@ -37,7 +37,7 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
                             }
                             let pathPrefix: string = hash + urlParts.join('/') + '/';
                             if (process.env.PUBLIC_URL) {
-                                pathPrefix = `${process.env.PUBLIC_URL}${hash}/${pathPrefix}`;
+                                pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
                             }
                             let fixedPath = path.resolve(pathPrefix, mdPath[1]);
                             markdown = markdown.replace(pathToReplace, fixedPath);
