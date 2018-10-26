@@ -2,8 +2,10 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from 'axios';
-import { Converter } from 'showdown';
 
+const hljs = require('highlightjs');
+console.log(hljs);
+const showdown = require('showdown');
 const path = require('path');
 
 export interface MarkDownProps { markdown: string, markdownUrl: string, clickHandler: any }
@@ -16,10 +18,31 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
     }
 
     componentDidMount() {
+        showdown.extension('highlight', function () {
+        	return [{
+          	type: "output",
+          	filter: function (text, converter, options) {
+              var left = "<pre><code\\b[^>]*>",
+                  right = "</code></pre>",
+                  flags = "g";
+              var replacement = function (wholeMatch, match, left, right) {
+              	var lang = (left.match(/class=\"([^ \"]+)/) || [])[1];
+                left = left.slice(0, 18) + 'hljs ' + left.slice(18);
+                if (lang && hljs.getLanguage(lang)) {
+                	return left + hljs.highlight(lang, match).value + right;
+        				} else {
+        					return left + hljs.highlightAuto(match).value + right;
+        				}
+        			};
+              return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags);
+            }
+          }];
+        });
+
         if (!this.props.markdown) {
             this.loadMarkdown(this.props.markdownUrl)
                 .then(markdown => {
-                    console.log(`Markdown: window.location: `, window.location);
+                    // console.log(`Markdown: window.location: `, window.location);
                     let hash: string = window.location.hash;
                     let urlParts: string[] = hash.split('/');
                     urlParts.shift(); // remove first # element
@@ -52,7 +75,7 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
                         // http://localhost:3000/assets/showdown.png
                         // http://localhost:3000/posts/development/assets/showdown.png
 
-                    let converter = new Converter();
+                    let converter = new showdown.Converter({extensions: ['highlight']});
                     let html = converter.makeHtml(markdown);
                     this.setState({html: html});
                 })
@@ -76,6 +99,7 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
 
     back(event) {
         event.preventDefault();
+        event.stopPropagation();
         window.history.back();
     }
 
@@ -83,7 +107,7 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
         let markdownDiv: any = <div className="post" dangerouslySetInnerHTML={{__html: this.state.html}} />
         return (
             <div onClick={this.onClick}>
-                <Link to={`/blog`}>Blog</Link><br/>
+                <Link onClick={this.back} to={`/blog`}>Blog</Link><br/>
                 {markdownDiv}
             </div>
         );

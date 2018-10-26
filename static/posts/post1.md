@@ -10,9 +10,7 @@
 - topic 3 (bootstrap)
 
 
-```
-A ship in a harbor is safe but that is not what ships were made for.
-```
+> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote.
 
 Demo: [http://wwlib.org/react-typescript-static-site-example/](http://wwlib.org/react-typescript-static-site-example/)
 
@@ -22,7 +20,7 @@ See related post: [dev-post2.md](./development/dev-post2.md)
 
 #### Code
 
-```Javascript
+```js
 const path = require('path'),
     express = require('express'),
     webpack = require('webpack'),
