@@ -18,6 +18,8 @@ Demo: [http://wwlib.org/react-typescript-static-site-example/](http://wwlib.org/
 
 See related post: [post2.md](./post2.md)
 
+See related post: [dev-post2.md](./development/dev-post2.md)
+
 #### Code
 
 ```Javascript

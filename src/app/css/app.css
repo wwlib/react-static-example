@@ -23,6 +23,22 @@ canvas {
     border-radius: 4px;
 }
 
+.post {
+    min-height: 500px;
+    /* background-color: white; */
+    padding: 6px;
+    /* color: black; */
+    border-radius: 4px;
+}
+
+.blog {
+    min-height: 500px;
+    /* background-color: white; */
+    padding: 6px;
+    /* color: black; */
+    border-radius: 4px;
+}
+
 
 
 /***************************
