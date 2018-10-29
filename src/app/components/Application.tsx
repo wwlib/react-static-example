@@ -12,6 +12,7 @@ import StatusWindow from './StatusWindow';
 import Markdown from './Markdown';
 import Blog from './Blog';
 import Chart from './Chart';
+import PixiExample from './PixiExample';
 
 export interface ApplicationProps { model: Model }
 export interface ApplicationState {
@@ -143,6 +144,10 @@ export default class Application extends React.Component<ApplicationProps, Appli
 
     }
 
+    onPixiClick(type: string, value: string): void {
+
+    }
+
     render() {
         let statusWindow = this.state.showStatusWindow ? <StatusWindow id={'statusWindow'} messages={this.props.model.statusMessages} onClick={this.onStatusWindowClick} onMounted={this.onWindowMounted}/> : null;
 
@@ -166,6 +171,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
                             <Route path={`/blog`}render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
                             <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
                             <Route path={`/chart`} render={(props) => <Chart {...props}  onChartClick={this.onChartClick} />} />
+                            <Route path={`/pixi`} render={(props) => <PixiExample {...props}  clickHandler={this.onPixiClick} />} />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
                         </Switch>
                     </ReactBootstrap.Col>

@@ -22,6 +22,7 @@ export default class LeftNav extends React.Component<LeftNavProps, LeftNavState>
               <Link to={`/blog`}>Blog</Link><br/>
               <Link to={`/canvas`}>Canvas</Link><br/>
               <Link to={`/chart`}>Chart</Link><br/>
+              <Link to={`/pixi`}>Pixi</Link><br/>
           </div>
         );
     }
