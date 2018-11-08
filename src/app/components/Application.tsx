@@ -2,15 +2,17 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import { Route, Switch } from "react-router-dom";
 
+import Header from './Header';
 import TopNav from './TopNav';
 import BottomNav from './BottomNav';
-import LeftNav from './LeftNav';
+// import LeftNav from './LeftNav';
 import Model, { Mode } from '../model/Model';
-import Page from './Page';
-import CanvasPage from './CanvasPage';
+// import Page from './Page';
 import StatusWindow from './StatusWindow';
 import Markdown from './Markdown';
 import Blog from './Blog';
+
+import CanvasPage from './CanvasPage';
 import Chart from './Chart';
 import PixiExample from './PixiExample';
 
@@ -39,6 +41,7 @@ export default class Application extends React.Component<ApplicationProps, Appli
         this.props.model.addPanelWithId('statusWindow');
         this.onStatusWindowClick = this.onStatusWindowClick.bind(this);
         this.onWindowMounted = this.onWindowMounted.bind(this);
+        this.onHeaderClick = this.onHeaderClick.bind(this);
         this.onTopNavClick = this.onTopNavClick.bind(this);
         this.onPostClick = this.onPostClick.bind(this);
         this.onBlogClick = this.onBlogClick.bind(this);
@@ -58,6 +61,14 @@ export default class Application extends React.Component<ApplicationProps, Appli
 
     componentWillUnmount() {
         this.props.model.removeListener('modeChange', this._modeChangeHandler);
+    }
+
+    onHeaderClick(event: any): void {
+        let nativeEvent: any = event.nativeEvent;
+        switch (nativeEvent.target.id) {
+            case 'tbd':
+                break;
+        }
     }
 
     onTopNavClick(event: any): void {
@@ -148,30 +159,67 @@ export default class Application extends React.Component<ApplicationProps, Appli
 
     }
 
+    // <Route exact path={`/`} render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
+    // <Route path={`/pages/page`} render={(props) => <Markdown {...props} markdown='' markdownUrl={`pages/page.md`} clickHandler={this.onPostClick} /> }/>
+    // <Route path={`/posts/:category/:url`} render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.category}/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
+    // <Route path={`/posts/:url`} render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
+    // <Route path={`/blog`} render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
+    // <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
+    // <Route path={`/chart`} render={(props) => <Chart {...props}  onChartClick={this.onChartClick} />} />
+    // <Route path={`/pixi`} render={(props) => <PixiExample {...props}  clickHandler={this.onPixiClick} width={600} height={400}/>} />
+    // <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
+
+    // <Route path={`/page1`} render={(props) => <Markdown {...props} markdown='<a href="/#/pages/page2.md">page2.md</a>' markdownUrl={`pages/page1.md`} clickHandler={this.onPostClick} /> }/>
+    // <Route path={`/page2`} render={(props) => <Markdown {...props} markdown='<a href="/#/pages/page3.md">page3.md</a>' markdownUrl={`pages/page1.md`} clickHandler={this.onPostClick} /> }/>
+    // <Route path={`/page3`} render={(props) => <Markdown {...props} markdown='<a href="/#/pages/page1.md">page1.md</a>' markdownUrl={`pages/page1.md`} clickHandler={this.onPostClick} /> }/>
+
+    // WORKS
+    // <Route path={`/page1`} render={()=>(<div className='page'><h1>Page1</h1><a href="/#/page2">page2</a></div>)} />
+    // <Route path={`/page2`} render={()=>(<div className='page'><h1>Page2</h1><a href="/#/page3">page3</a></div>)} />
+    // <Route path={`/page3`} render={()=>(<div className='page'><h1>Page3</h1><a href="/#/page1">page1</a></div>)} />
+
+    // <h1>Page3</h1><a href="/#/pages/page1">page1</a>
+
+    // <Route path={`/pages/page1`} render={()=>(<div className='page'><h1>Page1</h1><a href="/#/pages/page2">page2</a></div>)} />
+    // <Route path={`/pages/page2`} render={()=>(<div className='page'><h1>Page2</h1><a href="/#/pages/page3">page3</a></div>)} />
+
+    // <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
+    // <Route path={`/chart`} render={(props) => <Chart {...props}  onChartClick={this.onChartClick} />} />
+    // <Route path={`/pixi`} render={(props) => <PixiExample {...props}  clickHandler={this.onPixiClick} width={600} height={400}/>} />
+
+    // getPostMarkdownWithCategoryAndUrl(category: string, url: string): string {
+    //
+    //     return `#### Hello`;
+    // }
+
     render() {
         let statusWindow = this.state.showStatusWindow ? <StatusWindow id={'statusWindow'} messages={this.props.model.statusMessages} onClick={this.onStatusWindowClick} onMounted={this.onWindowMounted}/> : null;
+        // <Route path={`/page`}render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
 
         return (
             <ReactBootstrap.Grid>
+                <ReactBootstrap.Row>
+                    <ReactBootstrap.Col>
+                        <Header clickHandler={this.onHeaderClick} />
+                    </ReactBootstrap.Col>
+                </ReactBootstrap.Row>
                 <ReactBootstrap.Row>
                     <ReactBootstrap.Col>
                         <TopNav clickHandler={this.onTopNavClick} />
                     </ReactBootstrap.Col>
                 </ReactBootstrap.Row>
                 <ReactBootstrap.Row>
-                    <ReactBootstrap.Col xs={2} md={2}>
-                        <LeftNav clickHandler={this.onLeftNavClick} />
-                    </ReactBootstrap.Col>
-                    <ReactBootstrap.Col xs={10} md={10}>
+                    <ReactBootstrap.Col>
                         <Switch>
                             <Route exact path={`/`} render={()=>(<div className='page'><h1>Home</h1>React Typescript Static Site Example</div>)} />
-                            <Route path={`/page`}render={(props) => <Page {...props} content={{title: 'Title', body: 'Hello, world!'}} />} />
-                            <Route path={`/posts/:category/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.category}/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
-                            <Route path={`/posts/:url`}render={(props) => <Markdown {...props} markdown='' markdownUrl={`posts/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
-                            <Route path={`/blog`}render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
+                            <Route path={`/pages/:url`} render={(props) => <Markdown {...props} markdown='' markdownUrl={`pages/${props.match.params.url}`} clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/posts/:category/:url`} render={(props) => <Markdown {...props} markdown={`${this.props.model.getPostMarkdownWithCategoryAndUrl(props.match.params.category, props.match.params.url)}`} markdownUrl='' clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/posts/:url`} render={(props) => <Markdown {...props} markdown={`${this.props.model.getPostMarkdownWithCategoryAndUrl(props.match.params.category, props.match.params.url)}`} markdownUrl='' clickHandler={this.onPostClick} /> }/>
+                            <Route path={`/blog`} render={(props) => <Blog {...props} postsUrl='posts/posts.json' clickHandler={this.onBlogClick} />} />
                             <Route path={`/canvas`} render={(props) => <CanvasPage {...props}  onToolClick={this.onToolClick} onXtraClick={this.onXtraClick} mode={this.state.toolbarMode} model={this.props.model} />} />
                             <Route path={`/chart`} render={(props) => <Chart {...props}  onChartClick={this.onChartClick} />} />
-                            <Route path={`/pixi`} render={(props) => <PixiExample {...props}  clickHandler={this.onPixiClick} />} />
+                            <Route path={`/pixi`} render={(props) => <PixiExample {...props}  clickHandler={this.onPixiClick} width={600} height={400}/>} />
+                            <Route path={`/_book`} onEnter={() => {window.location.href='/_book'; window.location.reload()} } />
                             <Route path="*" render={()=>(<div className='page'><h1>404</h1></div>)} />
                         </Switch>
                     </ReactBootstrap.Col>

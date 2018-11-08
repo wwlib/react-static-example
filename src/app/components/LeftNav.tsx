@@ -18,7 +18,7 @@ export default class LeftNav extends React.Component<LeftNavProps, LeftNavState>
         return (
             <div>
               <Link to={`/`}>Home</Link><br/>
-              <Link to={`/page`}>Page</Link><br/>
+              <Link to={`/pages/page`}>Page</Link><br/>
               <Link to={`/blog`}>Blog</Link><br/>
               <Link to={`/canvas`}>Canvas</Link><br/>
               <Link to={`/chart`}>Chart</Link><br/>

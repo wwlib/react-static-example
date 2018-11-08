@@ -1,18 +1,60 @@
 [
-    {
+  {
+    "category": "",
+    "posts": [
+      {
+        "title": "Post 1",
+        "description": "This is the first post",
+        "url": "post1.md",
         "category": "",
-        "posts": [
-            {"title": "First Post", "url": "post1"},
-            {"title": "Second Post", "url": "post2"},
-            {"title": "Third Post", "url": "post3"}
-        ]
-    },
-    {
+        "date": "2018-10-30 09:20:00",
+        "markdown": "### My First post\n\n<img src=\"./assets/react.png\" width=\"100px\">\n<img src=\"./assets/typescript.png\" width=\"100px\">\n<img src=\"./assets/bootstrap.png\" width=\"100px\">\n\n#### For today...\n- topic 1 (react)\n- topic 2 (typescript)\n- topic 3 (bootstrap)\n\n\n> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this is long enough to actually wrap for everyone. Oh, you can *put* **Markdown** into a blockquote.\n\nDemo: [http://wwlib.org/react-typescript-static-site-example/](http://wwlib.org/react-typescript-static-site-example/)\n\nSee related post: [post2.md](./post2.md)\n\nSee related post: [dev-post2.md](./development/dev-post2.md)\n\n#### Code\n\n```js\nvar str = 'For more information, see Chapter 3.4.5.1';\nvar re = /see (chapter \\d+(\\.\\d)*)/i;\nvar found = str.match(re);\n\nconsole.log(found);\n\n// logs [ 'see Chapter 3.4.5.1',\n//        'Chapter 3.4.5.1',\n//        '.1',\n//        index: 22,\n//        input: 'For more information, see Chapter 3.4.5.1' ]\n\n// 'see Chapter 3.4.5.1' is the whole match.\n// 'Chapter 3.4.5.1' was captured by '(chapter \\d+(\\.\\d)*)'.\n// '.1' was the last value captured by '(\\.\\d)'.\n// The 'index' property (22) is the zero-based index of the whole match.\n// The 'input' property is the original string that was parsed.\n\n```\n"
+      },
+      {
+        "title": "Post 2",
+        "description": "This is the second post",
+        "url": "post2.md",
+        "category": "",
+        "date": "2018-10-30 10:20:00",
+        "markdown": "### My Second post\n\n#### For today...\n- topic 4\n- topic 5\n"
+      },
+      {
+        "title": "Post 3",
+        "description": "This is the third post",
+        "url": "post3.md",
+        "category": "",
+        "date": "2018-10-30 11:20:00",
+        "markdown": "### My Third post\n\n#### For today...\n- topic 6\n- topic 7\n"
+      }
+    ]
+  },
+  {
+    "category": "development",
+    "posts": [
+      {
+        "title": "Development Post 1",
+        "description": "This is the first development post",
+        "url": "development/dev-post1.md",
         "category": "development",
-        "posts": [
-            {"title": "First Development Post", "url": "dev-post1"},
-            {"title": "Second Development Post", "url": "dev-post2"},
-            {"title": "Third Development Post", "url": "dev-post3"}
-        ]
-    }
+        "date": "2018-10-30 09:20:00",
+        "markdown": "### My First Development post\n\n![showdown](./assets/showdown.png =100x100)\n\nSee related post: [post2.md](../post2.md)\n\nSee related post: [dev-post3.md](./dev-post3.md)\n\n#### For today...\n- topic 1 (showdown)\n"
+      },
+      {
+        "title": "Development Post 2",
+        "description": "This is the second development post",
+        "url": "development/dev-post2.md",
+        "category": "development",
+        "date": "2018-10-30 10:20:00",
+        "markdown": "### My Second Development post\n\nSee related post: [post1.md](../post1.md)\n\n#### For today...\n- topic 3\n- topic 4\n"
+      },
+      {
+        "title": "Development Post 3",
+        "description": "This is the third development post",
+        "url": "development/dev-post3.md",
+        "category": "development",
+        "date": "2018-10-30 11:20:00",
+        "markdown": "### My Third Development post\n\n#### For today...\n- topic 5\n- topic 6\n"
+      }
+    ]
+  }
 ]

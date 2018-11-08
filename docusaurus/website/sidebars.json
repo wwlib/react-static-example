@@ -1,0 +1,8 @@
+{
+  "docs": {
+    "Docs": ["doc1", "doc2", "doc3", "exampledoc4.md", "exampledoc5.md"]
+  },
+  "docs-other": {
+    "Other": ["doc4", "doc5"]
+  }
+}

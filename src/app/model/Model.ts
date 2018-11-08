@@ -1,6 +1,7 @@
 import { EventEmitter } from "events";
 import { appVersion } from './AppVersion';
 import WindowController from './WindowController';
+import axios from 'axios';
 
 export enum Mode {
     Panning = 1,
@@ -16,6 +17,7 @@ export default class Model extends EventEmitter {
 
     public statusMessages: string;
     public mode: Mode;
+    public posts: any[];
 
     public mainCanvas: HTMLCanvasElement;
     public mainCtx: CanvasRenderingContext2D;
@@ -35,7 +37,16 @@ export default class Model extends EventEmitter {
         super();
         this.statusMessages = 'Model: ready.';
         this.mode = Mode.Selecting;
-        this.emit('ready', this);
+        this.posts = [];
+        this.loadPosts('posts/posts.json')
+            .then(posts => {
+                this.posts = posts;
+                this.emit('ready', this);
+            })
+            .catch(err => {
+                console.log(err);
+                this.emit('ready', this);
+            })
     }
 
     get appVerison(): string {
@@ -56,7 +67,33 @@ export default class Model extends EventEmitter {
         this.emit('updateModel');
     }
 
+    // posts
 
+    async loadPosts(url: string): Promise<any> {
+        const { data: posts } = await axios.get(url);
+        return posts;
+    }
+
+    getPostMarkdownWithCategoryAndUrl(category: string, url: string): string {
+        category = category || '';
+        console.log(`getPostMarkdownWithCategoryAndUrl: `, category, url);
+        let markdown: string = 'markdown';
+        for (let i: number=0; i<this.posts.length; i++) {
+            let categoryPosts: any = this.posts[i];
+            if (categoryPosts.category === category) {
+                for (let j: number=0; j<categoryPosts.posts.length; j++) {
+                    let post: any = categoryPosts.posts[j];
+                    let testUrl: string = category ? `${category}/${url}` : url;
+                    if (post.url === testUrl) {
+                        markdown = post.markdown;
+                        break;
+                    }
+                };
+                break;
+            }
+        };
+        return markdown;
+    }
 
     // call _setMode from within Model to emit the modeChange event
     private _setMode(mode: Mode, note: string = ''): void {

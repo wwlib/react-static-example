@@ -3,27 +3,31 @@ import * as ReactBootstrap from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
-const hljs = require('highlightjs');
-console.log(hljs);
+// const hljs = require('highlightjs');
+// console.log(hljs);
 const showdown = require('showdown');
 const path = require('path');
+const fm = require('front-matter');
 
-export interface MarkDownProps { history: any, location: any, markdown: string, markdownUrl: string, clickHandler: any }
-export interface MarkDownState { html: string }
+export interface MarkDownProps { history: any, location: any, markdown: string, markdownUrl: string, clickHandler: any, match: any }
+export interface MarkDownState { markdownUrl: string, html: string }
 
 export default class MarkDown extends React.Component<MarkDownProps, MarkDownState> {
 
     private _windowOnHashChangeHandlerRestore: any;
 
     componentWillMount() {
-        this.setState({html: ''});
+        this.setState({html: this.props.markdown});
     }
 
     componentDidMount() {
+        this.parseMarkdown();
         this._windowOnHashChangeHandlerRestore = window.onhashchange;
         window.onhashchange = () => {
-            console.log(`Markdown: has changed`);
-            location.reload();
+            console.log(`Markdown: location has changed: `, window.location.href);
+            this.parseMarkdown();
+            // location.reload();
+            // this.forceUpdate();
             // console.log(this.props);
             // console.log(window.location, window.location.hash);
             // let newLocationHash: string = window.location.hash;
@@ -36,83 +40,216 @@ export default class MarkDown extends React.Component<MarkDownProps, MarkDownSta
             //
             // }
         }
+    }
 
-        showdown.extension('highlight', function () {
-        	return [{
-          	type: "output",
-          	filter: function (text, converter, options) {
-              var left = "<pre><code\\b[^>]*>",
-                  right = "</code></pre>",
-                  flags = "g";
-              var replacement = function (wholeMatch, match, left, right) {
-              	var lang = (left.match(/class=\"([^ \"]+)/) || [])[1];
-                left = left.slice(0, 18) + 'hljs ' + left.slice(18);
-                if (lang && hljs.getLanguage(lang)) {
-                	return left + hljs.highlight(lang, match).value + right;
-        				} else {
-        					return left + hljs.highlightAuto(match).value + right;
-        				}
-        			};
-              return showdown.helper.replaceRecursiveRegExp(text, replacement, left, right, flags);
-            }
-          }];
-        });
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    //     console.log(`Markdown: getDerivedStateFromProps`, nextProps, prevState);
+    //     if (prevState) {
+    //         if(nextProps.markdownUrl !== prevState.markdownUrl){
+    //             return { markdownUrl: nextProps.markdownUrl};
+    //         } else {
+    //             return null;
+    //         }
+    //     } else {
+    //         return { markdownUrl: '', html: ''}
+    //     }
+    // }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     console.log(`Markdown: componentDidUpdate`, prevProps, prevState);
+    //     // if(prevProps.markdownUrl!==this.props.markdownUrl){
+    //     //     //Perform some operation here
+    //     //     // this.setState({markdownUrl: someValue});
+    //     //     // this.classMethod();
+    //     //     // this.parseMarkdown();
+    //     // }
+    //     // this.parseMarkdown();
+    // }
+
+    parseMarkdown() {
+        // console.log(`parseMarkdown`, this.props.markdown, this.props.markdownUrl);
+        // console.log(`Markdown: window.location: `, window.location);
+        let locationHash: string = window.location.hash;
+        let urlParts: string[] = locationHash.split('/');
+        urlParts.shift(); // remove first # element
+        urlParts.pop(); // remove last filename element
+        let basePath: string = urlParts.join('/');
 
         if (!this.props.markdown) {
-            this.loadMarkdown(this.props.markdownUrl)
+            console.log(`...loading: this.props.markdownUrl`);
+            MarkDown.loadMarkdown(this.props.markdownUrl)
                 .then(markdown => {
-                    // console.log(`Markdown: window.location: `, window.location);
-                    let hash: string = window.location.hash;
-                    let urlParts: string[] = hash.split('/');
-                    urlParts.shift(); // remove first # element
-                    urlParts.pop(); // remove last filename element
 
 
-                    let reg = /\[.*\]\((.*)\)/g;
-                    let mdPath;
-                    while((mdPath = reg.exec(markdown)) !== null) {
-                        let pathToReplace = mdPath[1];
-                        if (pathToReplace.indexOf('http') != 0) { // not http://...
-                            let hash = '/#/';
-                            if (pathToReplace.indexOf('/assets') >= 0) { //asset path
-                                hash = '';
-                            }
-                            let pathPrefix: string = hash + urlParts.join('/') + '/';
-                            if (process.env.PUBLIC_URL) {
-                                pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
-                            }
-                            let fixedPath = path.resolve(pathPrefix, mdPath[1]);
-                            markdown = markdown.replace(pathToReplace, fixedPath);
-                        }
-                    }
+                    // let reg = /\[.*\]\((.*)\)/g;
+                    // let mdPath;
+                    // let content = fm(markdown);
+                    // let markdownBody = content.body;
+                    // while((mdPath = reg.exec(markdownBody)) !== null) {
+                    //     let pathToReplace = mdPath[1];
+                    //     if (pathToReplace.indexOf('http') != 0) { // not http://...
+                    //         let hash = '/#/';
+                    //         if (pathToReplace.indexOf('/assets') >= 0) { //asset path
+                    //             hash = '';
+                    //         }
+                    //         let pathPrefix: string = hash + urlParts.join('/') + '/';
+                    //         console.log(`pathPrefix: ${pathPrefix}`);
+                    //         if (process.env.PUBLIC_URL) {
+                    //             pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
+                    //         }
+                    //         let fixedPath = path.resolve(pathPrefix, mdPath[1]);
+                    //         markdownBody = markdownBody.replace(pathToReplace, fixedPath);
+                    //     }
+                    // }
+                    //
+                    // reg = /src="(.*)"/g;
+                    // while((mdPath = reg.exec(markdownBody)) !== null) {
+                    //     let pathToReplace = mdPath[1];
+                    //     if (pathToReplace.indexOf('http') != 0) { // not http://...
+                    //         let hash = '/#/';
+                    //         if (pathToReplace.indexOf('/assets') >= 0) { //asset path
+                    //             hash = '';
+                    //         }
+                    //         let pathPrefix: string = hash + urlParts.join('/') + '/';
+                    //         console.log(`pathPrefix: ${pathPrefix}`);
+                    //         if (process.env.PUBLIC_URL) {
+                    //             pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
+                    //         }
+                    //         let fixedPath = path.resolve(pathPrefix, mdPath[1]);
+                    //         markdownBody = markdownBody.replace(pathToReplace, fixedPath);
+                    //     }
+                    // }
+                    //
+                    // let converter = new showdown.Converter({extensions: ['highlight']});
+                    // let html = converter.makeHtml(markdownBody);
 
-                    let converter = new showdown.Converter({extensions: ['highlight']});
-                    let html = converter.makeHtml(markdown);
-                    this.setState({html: html});
+                    this.setState({html: this.markdownToHtml(markdown, basePath)});
                 })
                 .catch(err => {
                     console.log(err);
                 })
         } else {
-            //render this.state.markdown
+            console.log(`...using: this.props.markdown`);
+            this.setState({html: this.markdownToHtml(this.props.markdown, basePath)});
+        }
+    }
+
+    markdownToHtml(markdown: string, basePath: string): string {
+        let reg = /\[.*\]\((.*)\)/g;
+        let mdPath;
+        let content = fm(markdown);
+        let markdownBody = content.body;
+        while((mdPath = reg.exec(markdownBody)) !== null) {
+            let pathToReplace = mdPath[1];
+            if (pathToReplace.indexOf('http') != 0) { // not http://...
+                let hash = '/#/';
+                if (pathToReplace.indexOf('/assets') >= 0) { //asset path
+                    hash = '';
+                }
+                let pathPrefix: string = hash + basePath + '/';
+                console.log(`pathPrefix: ${pathPrefix}`);
+                if (process.env.PUBLIC_URL) {
+                    pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
+                }
+                let fixedPath = path.resolve(pathPrefix, mdPath[1]);
+                markdownBody = markdownBody.replace(pathToReplace, fixedPath);
+            }
         }
 
+        reg = /src="(.*)"/g;
+        while((mdPath = reg.exec(markdownBody)) !== null) {
+            let pathToReplace = mdPath[1];
+            if (pathToReplace.indexOf('http') != 0) { // not http://...
+                let hash = '/#/';
+                if (pathToReplace.indexOf('/assets') >= 0) { //asset path
+                    hash = '';
+                }
+                let pathPrefix: string = hash + basePath + '/';
+                console.log(`pathPrefix: ${pathPrefix}`);
+                if (process.env.PUBLIC_URL) {
+                    pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
+                }
+                let fixedPath = path.resolve(pathPrefix, mdPath[1]);
+                markdownBody = markdownBody.replace(pathToReplace, fixedPath);
+            }
+        }
+
+        let converter = new showdown.Converter({extensions: ['highlight']});
+        let html = converter.makeHtml(markdownBody);
+        return html;
+    }
+
+    // static parseMarkdownUrl(markdownUrl: string): Promise<any> {
+    //     return new Promise<string>((resolve: any, reject: any) => {
+    //         MarkDown.loadMarkdown(markdownUrl)
+    //             .then(markdown => {
+    //                 // console.log(`Markdown: window.location: `, window.location);
+    //                 let hash: string = window.location.hash;
+    //                 let urlParts: string[] = hash.split('/');
+    //                 urlParts.shift(); // remove first # element
+    //                 urlParts.pop(); // remove last filename element
+    //
+    //
+    //                 let reg = /\[.*\]\((.*)\)/g;
+    //                 let mdPath;
+    //                 while((mdPath = reg.exec(markdown)) !== null) {
+    //                     let pathToReplace = mdPath[1];
+    //                     if (pathToReplace.indexOf('http') != 0) { // not http://...
+    //                         let hash = '/#/';
+    //                         if (pathToReplace.indexOf('/assets') >= 0) { //asset path
+    //                             hash = '';
+    //                         }
+    //                         let pathPrefix: string = hash + urlParts.join('/') + '/';
+    //                         console.log(`pathPrefix: ${pathPrefix}`);
+    //                         if (process.env.PUBLIC_URL) {
+    //                             pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
+    //                         }
+    //                         let fixedPath = path.resolve(pathPrefix, mdPath[1]);
+    //                         markdown = markdown.replace(pathToReplace, fixedPath);
+    //                     }
+    //                 }
+    //
+    //                 reg = /src="(.*)"/g;
+    //                 while((mdPath = reg.exec(markdown)) !== null) {
+    //                     let pathToReplace = mdPath[1];
+    //                     if (pathToReplace.indexOf('http') != 0) { // not http://...
+    //                         let hash = '/#/';
+    //                         if (pathToReplace.indexOf('/assets') >= 0) { //asset path
+    //                             hash = '';
+    //                         }
+    //                         let pathPrefix: string = hash + urlParts.join('/') + '/';
+    //                         console.log(`pathPrefix: ${pathPrefix}`);
+    //                         if (process.env.PUBLIC_URL) {
+    //                             pathPrefix = `${process.env.PUBLIC_URL}/${pathPrefix}`;
+    //                         }
+    //                         let fixedPath = path.resolve(pathPrefix, mdPath[1]);
+    //                         markdown = markdown.replace(pathToReplace, fixedPath);
+    //                     }
+    //                 }
+    //
+    //                 let converter = new showdown.Converter({extensions: ['highlight']});
+    //                 let html = converter.makeHtml(markdown);
+    //                 resolve(html);
+    //             })
+    //             .catch(err => {
+    //                 reject(err);
+    //             });
+    //     });
+    // }
+
+    static async loadMarkdown(url: string): Promise<any> {
+        const { data: markdown } = await axios.get(url);
+        return markdown;
     }
 
     componentWillUnmount() {
         window.onhashchange = this._windowOnHashChangeHandlerRestore;
     }
 
-    async loadMarkdown(url: string): Promise<any> {
-        const { data: markdown } = await axios.get(url);
-        return markdown;
-    }
-
     render() {
         let markdownDiv: any = <div className="post" dangerouslySetInnerHTML={{__html: this.state.html}} />
         return (
             <div>
-                <Link to={`/blog`}>Blog</Link><br/>
                 {markdownDiv}
             </div>
         );

@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactBootstrap from "react-bootstrap";
 import * as PIXI from 'pixi.js'
 
-export interface PixiExampleProps { clickHandler: any }
+export interface PixiExampleProps { clickHandler: any, width: number, height: number }
 export interface PixiExampleState { }
 
 export default class PixiExample extends React.Component<PixiExampleProps, PixiExampleState> {
@@ -29,8 +29,8 @@ export default class PixiExample extends React.Component<PixiExampleProps, PixiE
     setupPixiStage() {
         this._stage = new PIXI.Container();
         this._sprite = PIXI.Sprite.fromImage('assets/ww-logo-40.png');
-        this._sprite.x = 400;
-        this._sprite.y = 300;
+        this._sprite.x = this.props.width / 2;
+        this._sprite.y = this.props.height / 2;
         this._sprite.anchor.set(0.5);
         this._stage.addChild(this._sprite);
     }
@@ -41,7 +41,7 @@ export default class PixiExample extends React.Component<PixiExampleProps, PixiE
         if (this._canvas && this._renderer) {
             ready = true;
         } else if (this._canvas) {
-            this._renderer = PIXI.autoDetectRenderer(800, 600, {
+            this._renderer = PIXI.autoDetectRenderer(this.props.width, this.props.height, {
                 view: this._canvas,
                 backgroundColor: 0x0,
                 antialias: true
@@ -62,7 +62,7 @@ export default class PixiExample extends React.Component<PixiExampleProps, PixiE
     render() {
         return (
             <div className="pixiExample">
-                <canvas id="stage" width={800} height={600} />
+                <canvas id="stage" width={this.props.width} height={this.props.height} />
             </div>
         );
     }

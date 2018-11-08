@@ -1,3 +1,10 @@
+---
+title: Development Post 1  
+description: This is the first development post  
+category: development
+date: '2018-10-30 09:20:00'
+---
+
 ### My First Development post
 
 ![showdown](./assets/showdown.png =100x100)

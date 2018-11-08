@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "description": "",
   "main": "webpack.config.js",
-  "homepage": "/react-typescript-static-site-example",
+  "baseUrl": "/react-typescript-static-site-example",
   "scripts": {
     "test": "mocha -r ts-node/register test/**/*.spec.ts",
+    "prebuild": "node pre-build.js",
     "build": "./node_modules/.bin/webpack",
-    "start": "yarn build && node server.js",
+    "start": "yarn build && node simple-server.js",
+    "serve": "node simple-server.js",
     "version": "./version.sh $npm_package_version",
     "test-version": "./version.sh $npm_package_version"
   },
@@ -22,6 +24,7 @@
     "copy-webpack-plugin": "^4.5.2",
     "defaultcss": "^1.1.1",
     "express": "^4.16.3",
+    "front-matter": "^3.0.0",
     "highlightjs": "^9.12.0",
     "pixi.js": "^4.8.2",
     "react": "^16.3.2",

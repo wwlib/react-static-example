@@ -3,17 +3,21 @@ import * as ReactBootstrap from "react-bootstrap";
 import { Link } from "react-router-dom";
 import axios from 'axios';
 
-export interface BlogProps { postsUrl: string, clickHandler: any }
+export interface BlogProps { postsUrl: string, clickHandler: any, posts: any[] }
 export interface BlogState { posts: any[] }
 
 export default class Blog extends React.Component<BlogProps, BlogState> {
 
     componentWillMount() {
-        this.setState({posts: []});
+        if (this.props.posts) {
+            this.setState({posts: this.props.posts});
+        } else {
+            this.setState({posts: []});
+        }
     }
 
     componentDidMount() {
-        if (this.props.postsUrl) {
+        if (this.props.postsUrl && !this.props.posts) {
             this.loadPosts(this.props.postsUrl)
                 .then(posts => {
                     this.setState({posts: posts});
@@ -22,7 +26,7 @@ export default class Blog extends React.Component<BlogProps, BlogState> {
                     console.log(err);
                 })
         } else {
-            console.log(`Blog: postsUrl is invalid:`);
+            console.log(`Blog: using this.props.posts:`);
         }
 
     }
@@ -39,12 +43,17 @@ export default class Blog extends React.Component<BlogProps, BlogState> {
                 let categoryName: string = category.category;
                 let heading: string = categoryName ? `${categoryName} posts` : `posts`;
                 posts.push(<h4>{heading}</h4>);
-                let urlPrefix: string = categoryName ? `/#/posts/${categoryName}/` : `/#/posts/`;
+                // let urlPrefix: string = categoryName ? `/#/posts/${categoryName}/` : `/#/posts/`;
+                let urlPrefix: string = `/#/posts/`;
                 if (process.env.PUBLIC_URL) {
                     urlPrefix = `${process.env.PUBLIC_URL}${urlPrefix}`
                 }
                 category.posts.forEach(post => {
-                    posts.push(<p className='postLink'><a href={`${urlPrefix}${post.url}.md`}>{post.title}</a></p>);
+                    posts.push(<p className='postLink'>
+                        <a className='postTitle' href={`${urlPrefix}${post.url}`}>{post.title}</a>
+                        <div className='postDate'> - <i>{post.date}</i></div><br/>
+                        <div className='postDescription'>{post.description}</div>
+                    </p>);
                 });
             })
         }

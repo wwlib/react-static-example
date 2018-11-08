@@ -1,8 +1,14 @@
+---
+title: Post 1  
+description: This is the first post  
+category:
+date: '2018-10-30 09:20:00'
+---
 ### My First post
 
-![react](./assets/react.png =100x100)
-![typescript](./assets/typescript.png =100x100)
-![bootstrap](./assets/bootstrap.png =100x100)
+<img src="./assets/react.png" width="100px">
+<img src="./assets/typescript.png" width="100px">
+<img src="./assets/bootstrap.png" width="100px">
 
 #### For today...
 - topic 1 (react)
