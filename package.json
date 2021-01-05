@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/showdown": "^1.7.5",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-runtime": "^6.26.0",
     "classnames": "^2.2.6",
     "copy-webpack-plugin": "^4.5.2",
